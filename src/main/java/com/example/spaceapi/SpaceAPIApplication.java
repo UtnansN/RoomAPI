@@ -1,13 +1,13 @@
-package com.example.roomapi;
+package com.example.spaceapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RoomapiApplication {
+public class SpaceAPIApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RoomapiApplication.class, args);
+        SpringApplication.run(SpaceAPIApplication.class, args);
     }
 
 }

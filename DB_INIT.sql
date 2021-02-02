@@ -1,5 +1,5 @@
-CREATE DATABASE db_rooms;
+CREATE DATABASE db_spaces;
 
-CREATE USER 'db_rooms_user'@'%' identified by 'pass';
+CREATE USER 'db_spaces_user'@'%' identified by 'pass';
 
-GRANT ALL ON db_rooms.* TO 'db_rooms_user'@'%';
+GRANT ALL ON db_spaces.* TO 'db_spaces_user'@'%';

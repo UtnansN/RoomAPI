@@ -1,10 +1,10 @@
-package com.example.roomapi;
+package com.example.spaceapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RoomapiApplicationTests {
+class SpaceAPIApplicationTests {
 
     @Test
     void contextLoads() {

@@ -1,4 +1,4 @@
-package com.example.roomapi.entity;
+package com.example.spaceapi.entity;
 
 import lombok.Data;
 
@@ -24,7 +24,7 @@ public class Event {
     private String time;
 
     @ManyToOne
-    private Room room;
+    private Space space;
 
     @ManyToMany
     private List<User> attendees;

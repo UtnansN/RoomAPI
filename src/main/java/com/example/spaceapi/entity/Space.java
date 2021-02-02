@@ -1,4 +1,4 @@
-package com.example.roomapi.entity;
+package com.example.spaceapi.entity;
 
 import lombok.Data;
 
@@ -7,16 +7,14 @@ import java.util.List;
 
 @Data
 @Entity
-public class Room {
+public class Space {
 
-    @Id @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    @Id
+    private String spaceCode;
 
     private String name;
 
     private String description;
-
-    private String roomCode;
 
     @ManyToMany
     private List<User> members;
