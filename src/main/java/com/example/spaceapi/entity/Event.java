@@ -2,28 +2,28 @@ package com.example.spaceapi.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
 public class Event {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
 
     private String location;
 
-    private String time;
+    @Column(nullable = false)
+    private Date dateTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Space space;
 
     @ManyToMany

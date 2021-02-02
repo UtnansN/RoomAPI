@@ -10,7 +10,7 @@ import java.util.List;
 public class Space {
 
     @Id
-    private String spaceCode;
+    private String code;
 
     private String name;
 
@@ -19,6 +19,7 @@ public class Space {
     @ManyToMany
     private List<User> members;
 
-    @OneToMany
+    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
+
 }

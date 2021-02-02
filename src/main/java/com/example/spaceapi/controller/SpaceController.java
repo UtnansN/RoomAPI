@@ -2,6 +2,7 @@ package com.example.spaceapi.controller;
 
 
 import com.example.spaceapi.dto.CreateSpaceDto;
+import com.example.spaceapi.dto.SpaceInformationDto;
 import com.example.spaceapi.dto.UserSpacesDto;
 import com.example.spaceapi.entity.Space;
 import com.example.spaceapi.service.SpaceService;
@@ -11,24 +12,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/spaces")
 public class SpaceController {
 
     @Autowired
     private SpaceService spaceService;
 
-    @GetMapping("/spaces")
-    public List<Space> getRooms() {
+    @GetMapping
+    public List<UserSpacesDto> getSpaces() {
         return spaceService.getSpaces();
     }
 
-    @GetMapping("/spaces/{code}")
-    public UserSpacesDto getUserRooms(@PathVariable String code) {
-        return spaceService.getSpaceByCode(code);
+    @PostMapping
+    public Space addSpace(@RequestBody CreateSpaceDto spaceDto) {
+        return spaceService.createSpace(spaceDto);
     }
 
-    @PostMapping("/spaces")
-    public Space addRoom(@RequestBody CreateSpaceDto spaceDto) {
-        return spaceService.createSpace(spaceDto);
+    @GetMapping("/{code}")
+    public SpaceInformationDto getSpace(@PathVariable String code) {
+        return spaceService.getSpaceByCode(code);
     }
 
 }
