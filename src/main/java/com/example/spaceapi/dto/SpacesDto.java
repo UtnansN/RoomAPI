@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserSpacesDto {
+public class SpacesDto {
 
     @Data
     public static class EventBrief {

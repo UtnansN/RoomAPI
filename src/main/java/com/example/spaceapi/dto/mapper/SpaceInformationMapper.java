@@ -10,7 +10,7 @@ public class SpaceInformationMapper {
         dto.setCode(space.getCode());
         dto.setName(space.getName());
         dto.setDescription(space.getDescription());
-        dto.setMemberCount(space.getMembers().size());
+        dto.setMemberCount(space.getUserSpaces().size());
         return dto;
     }
 

@@ -1,12 +1,15 @@
 package com.example.spaceapi.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Event {
 
@@ -23,10 +26,10 @@ public class Event {
     @Column(nullable = false)
     private Date dateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Space space;
 
-    @ManyToMany
-    private List<User> attendees;
+//    @ManyToMany
+//    private List<User> attendees;
 
 }

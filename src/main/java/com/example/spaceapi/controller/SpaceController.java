@@ -3,7 +3,7 @@ package com.example.spaceapi.controller;
 
 import com.example.spaceapi.dto.CreateSpaceDto;
 import com.example.spaceapi.dto.SpaceInformationDto;
-import com.example.spaceapi.dto.UserSpacesDto;
+import com.example.spaceapi.dto.SpacesDto;
 import com.example.spaceapi.entity.Space;
 import com.example.spaceapi.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class SpaceController {
     private SpaceService spaceService;
 
     @GetMapping
-    public List<UserSpacesDto> getSpaces() {
-        return spaceService.getSpaces();
+    public List<SpacesDto> getSpaces() {
+        return spaceService.getSpacesForUser();
     }
 
     @PostMapping

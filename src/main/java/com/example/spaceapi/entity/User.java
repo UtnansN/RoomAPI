@@ -1,14 +1,16 @@
 package com.example.spaceapi.entity;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-@Data
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,8 +28,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
-    private List<Space> spaces;
-
+    @OneToMany(mappedBy = "user")
+    private List<UserSpace> userSpaces;
 
 }

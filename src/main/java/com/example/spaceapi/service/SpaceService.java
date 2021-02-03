@@ -3,13 +3,17 @@ package com.example.spaceapi.service;
 
 import com.example.spaceapi.dto.CreateSpaceDto;
 import com.example.spaceapi.dto.SpaceInformationDto;
-import com.example.spaceapi.dto.UserSpacesDto;
+import com.example.spaceapi.dto.SpacesDto;
 import com.example.spaceapi.dto.mapper.CreateSpaceMapper;
 import com.example.spaceapi.dto.mapper.SpaceInformationMapper;
-import com.example.spaceapi.dto.mapper.UserSpacesMapper;
+import com.example.spaceapi.dto.mapper.SpacesMapper;
 import com.example.spaceapi.entity.Space;
+import com.example.spaceapi.entity.User;
+import com.example.spaceapi.entity.UserSpace;
 import com.example.spaceapi.repository.SpaceRepository;
+import com.example.spaceapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,16 +24,24 @@ import java.util.stream.Collectors;
 public class SpaceService {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SecurityService securityService;
+
+    @Autowired
     private SpaceRepository spaceRepository;
 
-    public List<UserSpacesDto> getSpaces() {
-        List<Space> userSpaces = spaceRepository.findAll();
+    public List<SpacesDto> getSpacesForUser() {
+        User user = userRepository.findUserByEmail(securityService.getAuthentication().getName());
 
-        return userSpaces.stream()
-                .map(UserSpacesMapper::toUserSpacesDto)
+        return user.getUserSpaces().stream()
+                .map(UserSpace::getSpace)
+                .map(SpacesMapper::toUserSpacesDto)
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("@securityService.hasBasicAccessInSpace(code)")
     public SpaceInformationDto getSpaceByCode(String code) {
         Space space = spaceRepository.findById(code).orElseThrow();
         return SpaceInformationMapper.toDto(space);

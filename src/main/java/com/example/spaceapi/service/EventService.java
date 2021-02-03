@@ -8,11 +8,13 @@ import com.example.spaceapi.exception.SpaceNotFoundException;
 import com.example.spaceapi.repository.EventRepository;
 import com.example.spaceapi.repository.SpaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,9 +27,14 @@ public class EventService {
     private EventRepository eventRepository;
 
     @Autowired
+    private SecurityService securityService;
+
+    @Autowired
     private EventMapper eventMapper;
 
+    @PreAuthorize("@securityService.hasBasicAccessInSpace(#spaceCode)")
     public List<EventDto> getEvents(String spaceCode) {
+
         Space space = spaceRepository.findById(spaceCode).orElseThrow(SpaceNotFoundException::new);
 
         Date now = new Date();
@@ -38,12 +45,14 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("@securityService.hasWritePermissionInSpace(#eventDto.eventId)")
     public void alterEvent(EventDto eventDto) {
         Event event = eventRepository.getOne(eventDto.getEventId());
         eventMapper.updateEventFromDto(eventDto, event);
         eventRepository.save(event);
     }
 
+    @PreAuthorize("@securityService.hasWritePermissionInSpace(#roomCode)")
     public EventDto createEvent(EventDto eventDto, String roomCode) {
         Space space = spaceRepository.findById(roomCode).orElseThrow(SpaceNotFoundException::new);
         Event event = eventMapper.eventDtoToEvent(eventDto);

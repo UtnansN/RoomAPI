@@ -1,11 +1,15 @@
 package com.example.spaceapi.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Space {
 
@@ -16,10 +20,10 @@ public class Space {
 
     private String description;
 
-    @ManyToMany
-    private List<User> members;
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<UserSpace> userSpaces;
 
-    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<Event> events;
 
 }
