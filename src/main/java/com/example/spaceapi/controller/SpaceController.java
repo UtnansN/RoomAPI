@@ -23,6 +23,11 @@ public class SpaceController {
         return spaceService.getSpacesForUser();
     }
 
+    @PostMapping("/{code}/join")
+    public void joinSpace(@PathVariable String code) {
+        spaceService.addUserToSpace(code);
+    }
+
     @PostMapping
     public Space addSpace(@RequestBody CreateSpaceDto spaceDto) {
         return spaceService.createSpace(spaceDto);

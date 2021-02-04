@@ -19,7 +19,7 @@ public class EventController {
         return eventService.getEvents(spaceCode);
     }
 
-    @PostMapping("/spaces/{spaceCode}/event")
+    @PostMapping("/spaces/{spaceCode}/events")
     public EventDto createEvent(@RequestBody EventDto eventDto, @PathVariable String spaceCode) {
         return eventService.createEvent(eventDto, spaceCode);
     }

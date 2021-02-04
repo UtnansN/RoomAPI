@@ -5,11 +5,13 @@ import com.example.spaceapi.dto.mapper.UserMapper;
 import com.example.spaceapi.entity.User;
 import com.example.spaceapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 
@@ -28,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public void register(CreateUserDto userDto) {
 
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            return;
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email in use");
         };
 
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
