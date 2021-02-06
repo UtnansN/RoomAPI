@@ -29,7 +29,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private ObjectMapper mapper;
 
-    // 1 minute
+    // 15 minutes
     private final int JWT_TIMEOUT = 900000;
 
     public JWTAuthenticationFilter(AuthenticationManager authManager) {

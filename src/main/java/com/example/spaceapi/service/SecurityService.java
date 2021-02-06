@@ -22,7 +22,7 @@ public class SecurityService {
     public boolean hasBasicAccessInSpace(String spaceCode) {
         Authentication auth = getAuthentication();
         return userRepository.findUserByEmail(auth.getName())
-                .getUserSpaces().stream()
+                .getSpaces().stream()
                 .map(UserSpace::getSpace)
                 .anyMatch(space -> space.getCode().equals(spaceCode));
     }
@@ -30,15 +30,10 @@ public class SecurityService {
     public boolean hasWritePermissionInSpace(String spaceCode) {
         Authentication auth = getAuthentication();
         return userRepository.findUserByEmail(auth.getName())
-                .getUserSpaces().stream()
+                .getSpaces().stream()
                 .filter(us -> us.getRole() == UserSpace.SpaceRole.MODERATOR || us.getRole() == UserSpace.SpaceRole.ADMIN)
                 .map(UserSpace::getSpace)
                 .anyMatch(space -> space.getCode().equals(spaceCode));
-    }
-
-    public boolean hasWritePermissionInSpace(Long eventId) {
-        Event event = eventRepository.findById(eventId).orElseThrow();
-        return hasWritePermissionInSpace(event.getSpace().getCode());
     }
 
     public Authentication getAuthentication() {

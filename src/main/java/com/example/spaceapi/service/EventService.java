@@ -45,20 +45,21 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("@securityService.hasWritePermissionInSpace(#eventDto.eventId)")
-    public void alterEvent(EventDto eventDto) {
-        Event event = eventRepository.getOne(eventDto.getEventId());
-        eventMapper.updateEventFromDto(eventDto, event);
-        eventRepository.save(event);
-    }
-
-    @PreAuthorize("@securityService.hasWritePermissionInSpace(#roomCode)")
-    public EventDto createEvent(EventDto eventDto, String roomCode) {
-        Space space = spaceRepository.findById(roomCode).orElseThrow(SpaceNotFoundException::new);
+    @PreAuthorize("@securityService.hasWritePermissionInSpace(#spaceCode)")
+    public EventDto createEvent(EventDto eventDto, String spaceCode) {
+        Space space = spaceRepository.findById(spaceCode).orElseThrow(SpaceNotFoundException::new);
         Event event = eventMapper.eventDtoToEvent(eventDto);
 
         event.setSpace(space);
         return eventMapper.eventToEventDto(eventRepository.save(event));
+    }
+
+    @PreAuthorize("@securityService.hasWritePermissionInSpace(#spaceCode)")
+    public void alterEvent(EventDto eventDto, String spaceCode) {
+        Event event = eventRepository.findById(eventDto.getEventId()).orElseThrow();
+        eventMapper.updateEventFromDto(eventDto, event);
+
+
     }
 
 }

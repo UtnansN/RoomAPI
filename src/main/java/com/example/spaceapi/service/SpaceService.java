@@ -14,11 +14,11 @@ import com.example.spaceapi.exception.SpaceNotFoundException;
 import com.example.spaceapi.repository.SpaceRepository;
 import com.example.spaceapi.repository.UserRepository;
 import com.example.spaceapi.repository.UserSpaceRepository;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -41,7 +41,7 @@ public class SpaceService {
     public List<SpacesDto> getSpacesForUser() {
         User user = userRepository.findUserByEmail(securityService.getAuthentication().getName());
 
-        return user.getUserSpaces().stream()
+        return user.getSpaces().stream()
                 .map(UserSpace::getSpace)
                 .map(SpacesMapper::toUserSpacesDto)
                 .collect(Collectors.toList());
@@ -53,6 +53,7 @@ public class SpaceService {
         return SpaceInformationMapper.toDto(space);
     }
 
+    @Transactional
     public Space createSpace(CreateSpaceDto createSpaceDto) {
 
         Space space = CreateSpaceMapper.toSpace(createSpaceDto);
@@ -65,20 +66,22 @@ public class SpaceService {
             }
         }
 
-        return spaceRepository.save(space);
+        spaceRepository.save(space);
+        addUserToSpace(space, UserSpace.SpaceRole.ADMIN);
+        return space;
     }
 
     public void addUserToSpace(String code) {
-        User user = userRepository.findUserByEmail(securityService.getAuthentication().getName());
         Space space = spaceRepository.findById(code).orElseThrow(SpaceNotFoundException::new);
+        addUserToSpace(space, UserSpace.SpaceRole.BASE);
+    }
 
-        UserSpace userSpace = new UserSpace();
-        userSpace.setUser(user);
-        userSpace.setSpace(space);
-        userSpace.setRole(UserSpace.SpaceRole.BASE);
+    private void addUserToSpace(Space space, UserSpace.SpaceRole role) {
+        User user = userRepository.findUserByEmail(securityService.getAuthentication().getName());
+
+        UserSpace userSpace = new UserSpace(user, space, role);
         try {
-            user.getUserSpaces().add(userSpace);
-            userRepository.save(user);
+            userSpaceRepository.save(userSpace);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
@@ -90,7 +93,7 @@ public class SpaceService {
     // I don't have to worry about it because this is a toy app :)
     private String createRandomRoomCode() {
         final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        final Integer ROOM_CODE_LENGTH = 6;
+        final int ROOM_CODE_LENGTH = 6;
 
         StringBuilder str = new StringBuilder();
         Random random = new Random();

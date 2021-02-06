@@ -1,16 +1,16 @@
 package com.example.spaceapi.entity;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
-public class UserSpace implements Serializable {
+@NoArgsConstructor
+public class UserSpace {
 
     public enum SpaceRole {
         ADMIN,
@@ -18,12 +18,25 @@ public class UserSpace implements Serializable {
         BASE
     }
 
-    @Id
+    public UserSpace(User u, Space s, SpaceRole r) {
+        this.id = new UserSpaceKey();
+
+        this.user = u;
+        this.space = s;
+        this.role = r;
+    }
+
+    @EmbeddedId
+    private UserSpaceKey id;
+
     @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Id
     @ManyToOne
+    @MapsId("spaceCode")
+    @JoinColumn(name = "space_code")
     private Space space;
 
     private SpaceRole role;

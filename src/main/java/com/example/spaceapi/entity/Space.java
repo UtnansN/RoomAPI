@@ -21,9 +21,9 @@ public class Space {
     private String description;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
-    private List<UserSpace> userSpaces;
+    private Set<UserSpace> users;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
-    private List<Event> events;
+    private Set<Event> events;
 
 }

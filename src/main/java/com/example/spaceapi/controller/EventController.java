@@ -24,8 +24,8 @@ public class EventController {
         return eventService.createEvent(eventDto, spaceCode);
     }
 
-    @PutMapping("/event")
-    public void updateEvent(@RequestBody EventDto eventDto) {
-        eventService.alterEvent(eventDto);
+    @PutMapping("/spaces/{spaceCode}/events")
+    public void updateEvent(@RequestBody EventDto eventDto, @PathVariable String spaceCode) {
+        eventService.alterEvent(eventDto, spaceCode);
     }
 }
