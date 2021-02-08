@@ -2,16 +2,11 @@ package com.example.spaceapi.dto.mapper;
 
 import com.example.spaceapi.dto.SpaceInformationDto;
 import com.example.spaceapi.entity.Space;
+import org.mapstruct.Mapper;
 
-public class SpaceInformationMapper {
+@Mapper(componentModel = "spring")
+public interface SpaceInformationMapper {
 
-    public static SpaceInformationDto toDto(Space space) {
-        SpaceInformationDto dto = new SpaceInformationDto();
-        dto.setCode(space.getCode());
-        dto.setName(space.getName());
-        dto.setDescription(space.getDescription());
-        dto.setMemberCount(space.getUsers().size());
-        return dto;
-    }
+    SpaceInformationDto toSpaceInformationDto(Space space);
 
 }

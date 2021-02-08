@@ -2,6 +2,7 @@ package com.example.spaceapi.dto;
 
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -13,7 +14,7 @@ public class EventDto {
 
     private String description;
 
-    private Date dateTime;
+    private String dateTime;
 
     private String location;
 

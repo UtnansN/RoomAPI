@@ -15,8 +15,13 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/spaces/{spaceCode}/events")
-    public List<EventDto> getRoomEvents(@PathVariable String spaceCode) {
-        return eventService.getEvents(spaceCode);
+    public List<EventDto> getUpcomingEvents(@PathVariable String spaceCode) {
+        return eventService.getUpcomingEvents(spaceCode);
+    }
+
+    @GetMapping("/spaces/{spaceCode}/events/past")
+    public List<EventDto> getPastEvents(@PathVariable String spaceCode) {
+        return eventService.getPastEvents(spaceCode);
     }
 
     @PostMapping("/spaces/{spaceCode}/events")

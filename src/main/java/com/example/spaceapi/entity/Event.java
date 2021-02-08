@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Event {
     private String location;
 
     @Column(nullable = false)
-    private Date dateTime;
+    private Instant dateTime;
 
     @ManyToOne
     private Space space;

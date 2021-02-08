@@ -2,6 +2,8 @@ package com.example.spaceapi.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SpaceInformationDto {
 
@@ -11,6 +13,7 @@ public class SpaceInformationDto {
 
     private String description;
 
-    private Integer memberCount;
+    private List<UserDto> members;
 
+    private boolean canWrite;
 }

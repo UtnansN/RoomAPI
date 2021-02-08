@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -33,19 +34,28 @@ public class EventService {
     private EventMapper eventMapper;
 
     @PreAuthorize("@securityService.hasBasicAccessInSpace(#spaceCode)")
-    public List<EventDto> getEvents(String spaceCode) {
-
+    public List<EventDto> getUpcomingEvents(String spaceCode) {
         Space space = spaceRepository.findById(spaceCode).orElseThrow(SpaceNotFoundException::new);
 
-        Date now = new Date();
         return space.getEvents().stream()
-                .filter(event -> event.getDateTime().after(now))
+                .filter(event -> event.getDateTime().isAfter(Instant.now()))
                 .sorted(Comparator.comparing(Event::getDateTime))
                 .map(eventMapper::eventToEventDto)
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("@securityService.hasWritePermissionInSpace(#spaceCode)")
+    @PreAuthorize("@securityService.hasBasicAccessInSpace(#spaceCode)")
+    public List<EventDto> getPastEvents(String spaceCode) {
+        Space space = spaceRepository.findById(spaceCode).orElseThrow(SpaceNotFoundException::new);
+
+        return space.getEvents().stream()
+                .filter(event -> event.getDateTime().isBefore(Instant.now()))
+                .sorted(Comparator.comparing(Event::getDateTime).reversed())
+                .map(eventMapper::eventToEventDto)
+                .collect(Collectors.toList());
+    }
+
+    @PreAuthorize("@securityService.hasWriteAccessBySpaceCode(#spaceCode)")
     public EventDto createEvent(EventDto eventDto, String spaceCode) {
         Space space = spaceRepository.findById(spaceCode).orElseThrow(SpaceNotFoundException::new);
         Event event = eventMapper.eventDtoToEvent(eventDto);
@@ -54,7 +64,7 @@ public class EventService {
         return eventMapper.eventToEventDto(eventRepository.save(event));
     }
 
-    @PreAuthorize("@securityService.hasWritePermissionInSpace(#spaceCode)")
+    @PreAuthorize("@securityService.hasWriteAccessBySpaceCode(#spaceCode)")
     public void alterEvent(EventDto eventDto, String spaceCode) {
         Event event = eventRepository.findById(eventDto.getEventId()).orElseThrow();
         eventMapper.updateEventFromDto(eventDto, event);
