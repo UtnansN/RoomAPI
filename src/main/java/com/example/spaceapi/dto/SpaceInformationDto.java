@@ -14,6 +14,4 @@ public class SpaceInformationDto {
     private String description;
 
     private List<UserDto> members;
-
-    private boolean canWrite;
 }

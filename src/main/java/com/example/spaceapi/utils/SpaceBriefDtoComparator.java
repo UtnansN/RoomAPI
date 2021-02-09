@@ -1,4 +1,6 @@
-package com.example.spaceapi.dto;
+package com.example.spaceapi.utils;
+
+import com.example.spaceapi.dto.SpaceBriefDto;
 
 import java.time.Instant;
 import java.util.Comparator;

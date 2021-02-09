@@ -1,6 +1,7 @@
 package com.example.spaceapi.service;
 
 import com.example.spaceapi.dto.EventDto;
+import com.example.spaceapi.dto.EventPackageDto;
 import com.example.spaceapi.dto.mapper.EventMapper;
 import com.example.spaceapi.entity.Event;
 import com.example.spaceapi.entity.Space;
@@ -34,14 +35,19 @@ public class EventService {
     private EventMapper eventMapper;
 
     @PreAuthorize("@securityService.hasBasicAccessInSpace(#spaceCode)")
-    public List<EventDto> getUpcomingEvents(String spaceCode) {
+    public EventPackageDto getUpcomingEvents(String spaceCode) {
         Space space = spaceRepository.findById(spaceCode).orElseThrow(SpaceNotFoundException::new);
 
-        return space.getEvents().stream()
+        List<EventDto> events = space.getEvents().stream()
                 .filter(event -> event.getDateTime().isAfter(Instant.now()))
                 .sorted(Comparator.comparing(Event::getDateTime))
                 .map(eventMapper::eventToEventDto)
                 .collect(Collectors.toList());
+
+        return EventPackageDto.builder()
+                .events(events)
+                .hasEventCreateRights(securityService.hasWriteAccessBySpaceCode(spaceCode))
+                .build();
     }
 
     @PreAuthorize("@securityService.hasBasicAccessInSpace(#spaceCode)")

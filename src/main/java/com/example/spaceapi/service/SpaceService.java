@@ -2,12 +2,10 @@ package com.example.spaceapi.service;
 
 
 import com.example.spaceapi.dto.CreateSpaceDto;
-import com.example.spaceapi.dto.SpaceBriefDtoComparator;
+import com.example.spaceapi.dto.mapper.SpaceMapper;
+import com.example.spaceapi.utils.SpaceBriefDtoComparator;
 import com.example.spaceapi.dto.SpaceInformationDto;
 import com.example.spaceapi.dto.SpaceBriefDto;
-import com.example.spaceapi.dto.mapper.CreateSpaceMapper;
-import com.example.spaceapi.dto.mapper.SpaceInformationMapper;
-import com.example.spaceapi.dto.mapper.SpaceBriefMapper;
 import com.example.spaceapi.entity.Space;
 import com.example.spaceapi.entity.User;
 import com.example.spaceapi.entity.UserSpace;
@@ -15,15 +13,11 @@ import com.example.spaceapi.exception.SpaceNotFoundException;
 import com.example.spaceapi.repository.SpaceRepository;
 import com.example.spaceapi.repository.UserRepository;
 import com.example.spaceapi.repository.UserSpaceRepository;
-import javassist.compiler.ast.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Tuple;
 import javax.transaction.Transactional;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -35,23 +29,23 @@ public class SpaceService {
     private UserRepository userRepository;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
     private SpaceRepository spaceRepository;
 
     @Autowired
     private UserSpaceRepository userSpaceRepository;
 
     @Autowired
-    private SpaceInformationMapper spaceInformationMapper;
+    private SecurityService securityService;
+
+    @Autowired
+    private SpaceMapper spaceMapper;
 
     public List<SpaceBriefDto> getSpacesForUser() {
         User user = userRepository.findUserByEmail(securityService.getAuthentication().getName());
 
         return user.getSpaces().stream()
                 .map(UserSpace::getSpace)
-                .map(SpaceBriefMapper::toUserSpacesDto)
+                .map(spaceMapper::fromSpaceToSpaceBriefDto)
                 .sorted(new SpaceBriefDtoComparator())
                 .collect(Collectors.toList());
     }
@@ -59,13 +53,13 @@ public class SpaceService {
     @PreAuthorize("@securityService.hasBasicAccessInSpace(#code)")
     public SpaceInformationDto getSpaceByCode(String code) {
         Space space = spaceRepository.findById(code).orElseThrow();
-        return spaceInformationMapper.toSpaceInformationDto(space);
+        return spaceMapper.fromSpacetoSpaceInformationDto(space);
     }
 
     @Transactional
     public Space createSpace(CreateSpaceDto createSpaceDto) {
 
-        Space space = CreateSpaceMapper.toSpace(createSpaceDto);
+        Space space = spaceMapper.fromCreateSpaceDtoToSpace(createSpaceDto);
 
         while (true) {
             String generated = createRandomRoomCode();

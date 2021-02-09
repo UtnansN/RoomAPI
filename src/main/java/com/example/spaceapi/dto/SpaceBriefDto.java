@@ -23,7 +23,4 @@ public class SpaceBriefDto {
     private String name;
 
     private EventBrief nextEvent;
-
-    private boolean hasWriteRights;
-
 }
