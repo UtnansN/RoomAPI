@@ -1,4 +1,4 @@
-package com.example.spaceapi.dto;
+package com.example.spaceapi.dto.user;
 
 import lombok.Data;
 
@@ -9,4 +9,5 @@ public class UserDto {
 
     private String fullName;
 
+    private String role;
 }

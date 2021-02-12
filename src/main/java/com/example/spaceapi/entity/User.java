@@ -31,4 +31,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserSpace> spaces;
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
 }

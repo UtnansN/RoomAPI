@@ -1,4 +1,4 @@
-package com.example.spaceapi.filter;
+package com.example.spaceapi.security;
 
 public class SecurityConstants {
 

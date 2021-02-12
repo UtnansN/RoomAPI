@@ -1,7 +1,7 @@
 package com.example.spaceapi.service;
 
-import com.example.spaceapi.dto.EventDto;
-import com.example.spaceapi.dto.EventPackageDto;
+import com.example.spaceapi.dto.event.EventDto;
+import com.example.spaceapi.dto.event.EventPackageDto;
 import com.example.spaceapi.dto.mapper.EventMapper;
 import com.example.spaceapi.entity.Event;
 import com.example.spaceapi.entity.Space;
@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,8 +72,6 @@ public class EventService {
     public void alterEvent(EventDto eventDto, String spaceCode) {
         Event event = eventRepository.findById(eventDto.getEventId()).orElseThrow();
         eventMapper.updateEventFromDto(eventDto, event);
-
-
     }
 
 }

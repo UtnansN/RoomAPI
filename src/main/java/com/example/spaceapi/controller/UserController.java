@@ -1,6 +1,6 @@
 package com.example.spaceapi.controller;
 
-import com.example.spaceapi.dto.CreateUserDto;
+import com.example.spaceapi.dto.user.CreateUserDto;
 import com.example.spaceapi.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

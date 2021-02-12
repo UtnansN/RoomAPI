@@ -1,6 +1,6 @@
 package com.example.spaceapi.dto.mapper;
 
-import com.example.spaceapi.dto.EventDto;
+import com.example.spaceapi.dto.event.EventDto;
 import com.example.spaceapi.entity.Event;
 import org.mapstruct.*;
 

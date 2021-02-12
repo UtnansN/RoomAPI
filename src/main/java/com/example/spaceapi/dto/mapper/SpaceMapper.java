@@ -1,8 +1,10 @@
 package com.example.spaceapi.dto.mapper;
 
-import com.example.spaceapi.dto.CreateSpaceDto;
-import com.example.spaceapi.dto.SpaceBriefDto;
-import com.example.spaceapi.dto.SpaceInformationDto;
+import com.example.spaceapi.dto.event.NextEventBrief;
+import com.example.spaceapi.dto.space.CreateSpaceDto;
+import com.example.spaceapi.dto.space.SpaceBaseDto;
+import com.example.spaceapi.dto.space.SpaceBriefDto;
+import com.example.spaceapi.dto.space.SpaceInformationDto;
 import com.example.spaceapi.entity.Event;
 import com.example.spaceapi.entity.Space;
 import org.mapstruct.Mapper;
@@ -14,18 +16,21 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { UserMapper.class })
 public interface SpaceMapper {
 
     Space fromCreateSpaceDtoToSpace(CreateSpaceDto dto);
 
+    SpaceBaseDto fromSpaceToSpaceBaseDto(Space space);
+
     @Mapping(source = "space.events", target = "nextEvent", qualifiedByName = "extractNextEventInformation")
     SpaceBriefDto fromSpaceToSpaceBriefDto(Space space);
 
-    SpaceInformationDto fromSpacetoSpaceInformationDto(Space space);
+    @Mapping(source = "space.users", target = "members")
+    SpaceInformationDto fromSpaceToSpaceInformationDto(Space space);
 
     @Named("extractNextEventInformation")
-    static SpaceBriefDto.EventBrief extractNextEventInformation(Set<Event> events) {
+    static NextEventBrief extractNextEventInformation(Set<Event> events) {
         Instant now = Instant.now();
 
         Optional<Event> eventOptional = events.stream()
@@ -34,7 +39,7 @@ public interface SpaceMapper {
 
         if (eventOptional.isPresent()) {
             Event event = eventOptional.get();
-            SpaceBriefDto.EventBrief brief = new SpaceBriefDto.EventBrief();
+            NextEventBrief brief = new NextEventBrief();
             brief.setNextEventName(event.getName());
             brief.setNextEventDate(event.getDateTime());
             return brief;

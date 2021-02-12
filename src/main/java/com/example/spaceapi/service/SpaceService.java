@@ -1,11 +1,13 @@
 package com.example.spaceapi.service;
 
 
-import com.example.spaceapi.dto.CreateSpaceDto;
+import com.example.spaceapi.dto.space.CreateSpaceDto;
 import com.example.spaceapi.dto.mapper.SpaceMapper;
+import com.example.spaceapi.dto.space.SpaceBaseDto;
+import com.example.spaceapi.entity.UserSpaceKey;
 import com.example.spaceapi.utils.SpaceBriefDtoComparator;
-import com.example.spaceapi.dto.SpaceInformationDto;
-import com.example.spaceapi.dto.SpaceBriefDto;
+import com.example.spaceapi.dto.space.SpaceInformationDto;
+import com.example.spaceapi.dto.space.SpaceBriefDto;
 import com.example.spaceapi.entity.Space;
 import com.example.spaceapi.entity.User;
 import com.example.spaceapi.entity.UserSpace;
@@ -53,11 +55,11 @@ public class SpaceService {
     @PreAuthorize("@securityService.hasBasicAccessInSpace(#code)")
     public SpaceInformationDto getSpaceByCode(String code) {
         Space space = spaceRepository.findById(code).orElseThrow();
-        return spaceMapper.fromSpacetoSpaceInformationDto(space);
+        return spaceMapper.fromSpaceToSpaceInformationDto(space);
     }
 
     @Transactional
-    public Space createSpace(CreateSpaceDto createSpaceDto) {
+    public SpaceBaseDto createSpace(CreateSpaceDto createSpaceDto) {
 
         Space space = spaceMapper.fromCreateSpaceDtoToSpace(createSpaceDto);
 
@@ -71,12 +73,13 @@ public class SpaceService {
 
         spaceRepository.save(space);
         addUserToSpace(space, UserSpace.SpaceRole.ADMIN);
-        return space;
+        return spaceMapper.fromSpaceToSpaceBaseDto(space);
     }
 
-    public void addUserToSpace(String code) {
+    public SpaceBaseDto addUserToSpace(String code) {
         Space space = spaceRepository.findById(code).orElseThrow(SpaceNotFoundException::new);
         addUserToSpace(space, UserSpace.SpaceRole.BASE);
+        return spaceMapper.fromSpaceToSpaceBaseDto(space);
     }
 
     private void addUserToSpace(Space space, UserSpace.SpaceRole role) {
@@ -89,6 +92,19 @@ public class SpaceService {
             System.out.println(e.getMessage());
             throw e;
         }
+    }
+
+    @PreAuthorize("@securityService.hasBasicAccessInSpace(#code)")
+    public void leaveSpace(String code) {
+        User user = userRepository.findUserByEmail(securityService.getAuthentication().getName());
+
+        userSpaceRepository.findById(new UserSpaceKey(user.getId(), code))
+                .ifPresent(userSpaceRepository::delete);
+    }
+
+    @PreAuthorize("@securityService.hasAdminAccessInSpace(#code)")
+    public void deleteSpace(String code) {
+        spaceRepository.deleteById(code);
     }
 
     // Birthday problem. Possible id collisions will grow in amount as room count grows

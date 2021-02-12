@@ -1,9 +1,10 @@
 package com.example.spaceapi.controller;
 
 
-import com.example.spaceapi.dto.CreateSpaceDto;
-import com.example.spaceapi.dto.SpaceInformationDto;
-import com.example.spaceapi.dto.SpaceBriefDto;
+import com.example.spaceapi.dto.space.CreateSpaceDto;
+import com.example.spaceapi.dto.space.SpaceBaseDto;
+import com.example.spaceapi.dto.space.SpaceInformationDto;
+import com.example.spaceapi.dto.space.SpaceBriefDto;
 import com.example.spaceapi.entity.Space;
 import com.example.spaceapi.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,18 @@ public class SpaceController {
         return spaceService.getSpacesForUser();
     }
 
-    @PostMapping("/{code}/join")
-    public void joinSpace(@PathVariable String code) {
-        spaceService.addUserToSpace(code);
+    @PutMapping("/{code}/join")
+    public SpaceBaseDto joinSpace(@PathVariable String code) {
+        return spaceService.addUserToSpace(code);
+    }
+
+    @PutMapping("/{code}/leave")
+    public void leaveSpace(@PathVariable String code) {
+        spaceService.leaveSpace(code);
     }
 
     @PostMapping
-    public Space addSpace(@RequestBody CreateSpaceDto spaceDto) {
+    public SpaceBaseDto createSpace(@RequestBody CreateSpaceDto spaceDto) {
         return spaceService.createSpace(spaceDto);
     }
 
@@ -38,4 +44,8 @@ public class SpaceController {
         return spaceService.getSpaceByCode(code);
     }
 
+    @DeleteMapping("/{code}")
+    public void deleteSpace(@PathVariable String code) {
+        spaceService.deleteSpace(code);
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.spaceapi.config;
 
-import com.example.spaceapi.filter.JWTAuthenticationFilter;
-import com.example.spaceapi.filter.JWTAuthorizationFilter;
+import com.example.spaceapi.security.JWTAuthenticationFilter;
+import com.example.spaceapi.security.JWTAuthorizationFilter;
 import com.example.spaceapi.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,10 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true
-)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;

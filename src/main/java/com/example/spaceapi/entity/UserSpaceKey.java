@@ -8,6 +8,8 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserSpaceKey implements Serializable {
 
     @Column(name = "user_id")

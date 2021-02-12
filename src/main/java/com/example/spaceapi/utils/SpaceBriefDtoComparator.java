@@ -1,6 +1,7 @@
 package com.example.spaceapi.utils;
 
-import com.example.spaceapi.dto.SpaceBriefDto;
+import com.example.spaceapi.dto.event.NextEventBrief;
+import com.example.spaceapi.dto.space.SpaceBriefDto;
 
 import java.time.Instant;
 import java.util.Comparator;
@@ -9,8 +10,8 @@ public class SpaceBriefDtoComparator implements Comparator<SpaceBriefDto> {
 
     @Override
     public int compare(SpaceBriefDto o1, SpaceBriefDto o2) {
-        SpaceBriefDto.EventBrief eb1 = o1.getNextEvent();
-        SpaceBriefDto.EventBrief eb2 = o2.getNextEvent();
+        NextEventBrief eb1 = o1.getNextEvent();
+        NextEventBrief eb2 = o2.getNextEvent();
 
         if (eb1 != null && eb2 != null) {
 

@@ -1,4 +1,4 @@
-package com.example.spaceapi.filter;
+package com.example.spaceapi.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.spaceapi.filter.SecurityConstants.JWT_SECRET;
+import static com.example.spaceapi.security.SecurityConstants.JWT_SECRET;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 

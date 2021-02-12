@@ -1,6 +1,6 @@
 package com.example.spaceapi.service;
 
-import com.example.spaceapi.dto.CreateUserDto;
+import com.example.spaceapi.dto.user.CreateUserDto;
 import com.example.spaceapi.dto.mapper.UserMapper;
 import com.example.spaceapi.entity.User;
 import com.example.spaceapi.repository.UserRepository;

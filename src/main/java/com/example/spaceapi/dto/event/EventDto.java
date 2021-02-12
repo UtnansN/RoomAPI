@@ -1,4 +1,4 @@
-package com.example.spaceapi.dto;
+package com.example.spaceapi.dto.event;
 
 import lombok.Data;
 

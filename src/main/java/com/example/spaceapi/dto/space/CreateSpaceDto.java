@@ -1,12 +1,10 @@
-package com.example.spaceapi.dto;
+package com.example.spaceapi.dto.space;
 
 
 import lombok.Data;
 
 @Data
 public class CreateSpaceDto {
-
-    private String roomCode;
 
     private String name;
 
