@@ -2,6 +2,7 @@ package com.example.spaceapi.service;
 
 import com.example.spaceapi.dto.user.CreateUserDto;
 import com.example.spaceapi.dto.mapper.UserMapper;
+import com.example.spaceapi.entity.Image;
 import com.example.spaceapi.entity.User;
 import com.example.spaceapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -24,6 +27,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -38,6 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
     }
 
+    @Transactional
     public void register(CreateUserDto userDto) {
 
         if (userRepository.existsByEmail(userDto.getEmail())) {
@@ -48,6 +55,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             User user = userMapper.createUserDtoToUser(userDto);
             userRepository.save(user);
+
+            MultipartFile file = userDto.getImageFile();
+            if (file != null) {
+                Image image = new Image();
+                user.setImage(image);
+                imageService.setImageContent(image, userDto.getImageFile());
+                userRepository.save(user);
+            }
         }
     }
 

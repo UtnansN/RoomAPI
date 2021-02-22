@@ -18,10 +18,19 @@ public class SecurityService {
     @Autowired
     private EventRepository eventRepository;
 
-    public boolean hasBasicAccessInSpace(String spaceCode) {
+    public boolean hasBasicAccessBySpaceCode(String spaceCode) {
         return getUser().getSpaces().stream()
                 .map(UserSpace::getSpace)
                 .anyMatch(space -> space.getCode().equals(spaceCode));
+    }
+
+    public boolean hasBasicAccessByEventId(Long id) {
+        User user = getUser();
+        return eventRepository.getOne(id)
+                .getSpace()
+                .getUsers()
+                .stream()
+                .anyMatch(us -> us.getUser() == user);
     }
 
     public boolean hasWriteAccessBySpaceCode(String spaceCode) {

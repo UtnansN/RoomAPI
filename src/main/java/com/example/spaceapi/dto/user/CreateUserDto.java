@@ -1,6 +1,7 @@
 package com.example.spaceapi.dto.user;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class CreateUserDto {
@@ -13,4 +14,5 @@ public class CreateUserDto {
 
     private String lastName;
 
+    private MultipartFile imageFile;
 }

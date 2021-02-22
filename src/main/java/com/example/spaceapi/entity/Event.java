@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,13 +25,20 @@ public class Event {
 
     private String location;
 
+    // 0 means there's no limit on attendee count.
+    private Integer maxAttendees;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
     @Column(nullable = false)
     private Instant dateTime;
 
     @ManyToOne
     private Space space;
 
-//    @ManyToMany
-//    private List<User> attendees;
-
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OrderBy("user.firstName ASC, user.lastName ASC")
+    private Set<Attendee> attendees;
 }

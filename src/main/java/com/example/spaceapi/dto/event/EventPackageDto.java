@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class EventPackageDto {
 
-    private List<EventDto> events;
+    private List<EventBriefDto> events;
 
     private boolean hasEventCreateRights;
 

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.spaceapi.security.SecurityConstants.JWT_SECRET;
+import static com.example.spaceapi.security.SecurityConstants.JWT_AUTH_SECRET;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -59,7 +59,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = JWT.create()
                 .withSubject(authResult.getName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWT_TIMEOUT))
-                .sign(Algorithm.HMAC512(JWT_SECRET));
+                .sign(Algorithm.HMAC512(JWT_AUTH_SECRET));
 
         response.setContentType("application/json");
         response.getWriter().write(mapResponseBody(new SuccessDto(authResult.getName(), token)));

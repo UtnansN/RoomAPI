@@ -37,7 +37,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuth(String token) {
-        String user = JWT.require(Algorithm.HMAC512(JWT_SECRET))
+        String user = JWT.require(Algorithm.HMAC512(JWT_AUTH_SECRET))
                 .build()
                 .verify(token.replace(TOKEN_PREFIX, ""))
                 .getSubject();

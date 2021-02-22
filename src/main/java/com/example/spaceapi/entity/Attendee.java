@@ -7,29 +7,22 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.Instant;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
-public class UserSpace {
+public class Attendee {
 
-    public enum SpaceRole {
-        ADMIN,
-        MODERATOR,
-        BASE
-    }
-
-    public UserSpace(User u, Space s, SpaceRole r) {
-        this.id = new UserSpaceKey();
+    public Attendee(User u, Event e) {
+        this.id = new AttendeeKey();
 
         this.user = u;
-        this.space = s;
-        this.role = r;
+        this.event = e;
         this.joinDate = Instant.now();
     }
 
     @EmbeddedId
-    private UserSpaceKey id;
+    private AttendeeKey id;
 
     @ManyToOne
     @MapsId("userId")
@@ -37,12 +30,9 @@ public class UserSpace {
     private User user;
 
     @ManyToOne
-    @MapsId("spaceCode")
-    @JoinColumn(name = "space_code")
-    private Space space;
+    @MapsId("eventId")
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     private Instant joinDate;
-
-    private SpaceRole role;
-
 }

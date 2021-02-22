@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Date;
 
 @Data
-public class EventDto {
+public class EventBriefDto {
 
     private Long eventId;
 

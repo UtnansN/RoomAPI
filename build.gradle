@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test'
     implementation 'com.auth0:java-jwt:3.12.1'
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    implementation 'com.github.paulcwarren:spring-content-fs-boot-starter:1.2.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'

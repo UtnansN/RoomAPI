@@ -20,6 +20,10 @@ public class Space {
 
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
+
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private Set<UserSpace> users;
 
